@@ -1,0 +1,17 @@
+<html>
+    <head>
+        <title>{{ title }}</title>
+    <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
+    </head>
+
+<body>
+  <div class = "nav-container">
+      <table>
+          <td><a href="{{ url_for('index') }}" class="button">Home</a></td>
+          <td><a href="" class="button">Ants</a></td>
+      </table>
+      {% block content %} {% endblock %}
+  </div>
+</body>
+
+</html>
