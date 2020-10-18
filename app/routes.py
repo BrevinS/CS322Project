@@ -1,8 +1,8 @@
 from flask import render_template, flash, redirect, url_for, request
 from app import app, db
 from flask_sqlalchemy import sqlalchemy
-from app.forms import StudentForm, ProfessorForm
-from app.models import Student, Professor 
+from app.forms import StudentForm, ProfessorForm, CourseForm
+from app.models import Student, Professor, Course
 
 @app.before_first_request
 def initDB(*args, **kwargs):
@@ -13,16 +13,46 @@ def initDB(*args, **kwargs):
 def index():
     return render_template('base.html')
 
-@app.route('/register', methods=['GET', 'POST'])
-def register():
+@app.route('/profregister', methods=['GET', 'POST'])
+def profregister():
     form = ProfessorForm()
     if form.validate_on_submit():
-        prof = Professor(role=form.role.data, username=form.username.data, email=form.email.data, firstname=form.firstname.data,
+        acc = Professor(username=form.username.data, email=form.email.data, firstname=form.firstname.data,
             lastname=form.lastname.data, wsuid=form.wsuid.data, phone=form.phone.data)
-        prof.get_password(form.password2.data)
-        db.session.add(prof)
+        acc.get_password(form.password2.data)
+        db.session.add(acc)
         db.session.commit()
         flash('Congrats you are registered professor')
+        return redirect(url_for('createclass'))
+    return render_template('prof_reg.html', title='Register', form=form)
+
+@app.route('/studregister', methods=['GET', 'POST'])
+def studregister():
+    form = StudentForm()
+    if form.validate_on_submit():
+        acc = Professor(username=form.username.data, email=form.email.data, firstname=form.firstname.data,
+            lastname=form.lastname.data, wsuid=form.wsuid.data, phone=form.phone.data, major=form.major.data,
+            gpa=form.gpa.data, grad=form.grad.data)
+        acc.get_password(form.password2.data)
+        db.session.add(acc)
+        db.session.commit()
+        flash('Congrats you are registered student')
         return redirect(url_for('index'))
-    return render_template('prof_form.html', title='Register', form=form)
+    return render_template('stud_reg.html', title='Register', form=form)
+
+@app.route('/createcourse', methods=['GET', 'POST'])
+def createclass():
+    form = CourseForm()
+    if form.validate_on_submit():
+        newClass = Course(coursenum=form.coursenum.data, title=form.title.data, 
+            num_ta=form.num_ta.data, min_gpa=form.min_gpa.data, min_grade=form.min_grade.data)
+        db.session.add(newClass)
+        db.session.commit()
+        flash('The Course "' + newClass.coursenum + '-' + newClass.title + '" was created')
+        return redirect(url_for('index'))
+    return render_template('createcourse.html', form=form)
+
+
+
+
 

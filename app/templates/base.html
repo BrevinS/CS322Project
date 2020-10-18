@@ -10,6 +10,8 @@
           <td><a href="{{ url_for('index') }}" class="button">Home</a></td>
           <td><a href="" class="button">Ants</a></td>
       </table>
+      <a href="{{ url_for('studregister') }}" class="button">Register as Student</a>
+      <a href="{{ url_for('profregister') }}" class="button">Register as Professor</a>
       {% block content %} {% endblock %}
   </div>
 </body>

@@ -5,13 +5,6 @@
     <h1>EECS Teacher Assistant Registration</h1>
     <form action="" method="post">
         {{ form.hidden_tag() }}
-        <!--Role Bubbles-->
-        <!--Based on this we can add more to the form and 
-            prepare index page for their interface-->
-        {{ form.role.label }}
-            <div>
-                {{ form.role(class = 'formbody') }}
-            </div>
         <!--Username-->
         <p>
             {{ form.username.label }}<br>

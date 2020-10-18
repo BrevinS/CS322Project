@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1> Create a new class</h1>
+    {% if form %}
+        <form action="" method="POST">
+            {{ form.hidden_tag() }}
+
+                <p>{{ form.coursenum.label }}</p>
+                <p>{{ form.coursenum(class='textinput') }}</p>
+                {% for error in form.coursenum.errors %}
+                <span style="color: navy;">[{{ error }}]</span>
+                {% endfor %}
+
+                <p>{{ form.title.label }}</p>
+                <p>{{ form.title(class='textinput') }}</p>
+                {% for error in form.coursenum.errors %}
+                <span style="color: navy;">[{{ error }}]</span>
+                {% endfor %}
+
+                <p>{{ form.num_ta.label }}</p>
+                <p>{{ form.num_ta(class='textinput') }}</p>
+                {% for error in form.num_ta.errors %}
+                <span style="color: navy;">[{{ error }}]</span>
+                {% endfor %}
+
+                <p>{{ form.min_gpa.label }}</p>
+                <p>{{ form.min_gpa(class='textinput') }}</p>
+                {% for error in form.min_gpa.errors %}
+                <span style="color: navy;">[{{ error }}]</span>
+                {% endfor %}
+
+                <p>{{ form.min_grade.label }}</p>
+                <p>{{ form.min_grade(class='textinput') }}</p>
+                {% for error in form.min_grade.errors %}
+                <span style="color: navy;">[{{ error }}]</span>
+                {% endfor %}
+
+            <p>{{ form.submit(class='button') }}</p>
+        </form> 
+
+    {% endif %}
+
+{% endblock %}
