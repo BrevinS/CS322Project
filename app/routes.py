@@ -11,7 +11,8 @@ def initDB(*args, **kwargs):
 @app.route('/', methods=['GET'])
 @app.route('/index', methods=['GET'])
 def index():
-    return render_template('base.html')
+    courses = Course.query.order_by(Course.coursenum).all()
+    return render_template('studentInterface.html', courses=courses)
 
 @app.route('/profregister', methods=['GET', 'POST'])
 def profregister():
@@ -23,6 +24,7 @@ def profregister():
         db.session.add(acc)
         db.session.commit()
         flash('Congrats you are registered professor')
+        ##REDIRECT SO THE TEACHER CAN CREATE COURSES
         return redirect(url_for('createclass'))
     return render_template('prof_reg.html', title='Register', form=form)
 
@@ -30,13 +32,15 @@ def profregister():
 def studregister():
     form = StudentForm()
     if form.validate_on_submit():
-        acc = Professor(username=form.username.data, email=form.email.data, firstname=form.firstname.data,
-            lastname=form.lastname.data, wsuid=form.wsuid.data, phone=form.phone.data, major=form.major.data,
-            gpa=form.gpa.data, grad=form.grad.data)
+        acc = Student(username=form.username.data, email=form.email.data, firstname=form.firstname.data,
+            lastname=form.lastname.data, wsuid=form.wsuid.data, phone=form.phone.data, 
+            c_gpa=form.c_gpa.data, grad_date=form.grad_date.data)
         acc.get_password(form.password2.data)
         db.session.add(acc)
         db.session.commit()
         flash('Congrats you are registered student')
+        ##REDIRECT AFTER STUDENT REGISTERS THEY NEED TO SEE COURSES && APPLY
+        ##I need to add new page
         return redirect(url_for('index'))
     return render_template('stud_reg.html', title='Register', form=form)
 

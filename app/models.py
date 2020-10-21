@@ -39,12 +39,21 @@ class Student(db.Model):
     phone = db.Column(db.String(10), unique=True)
 
     major = db.Column(db.Integer)
-    gpa = db.Column(db.Float)
-    grad = db.Column(db.String(32))
+    c_gpa = db.Column(db.Float)
+    grad_date = db.Column(db.String(32))
 
     pendingapps = db.relationship ('Course', secondary = applied,
                             primaryjoin=(applied.c.studentid == id),
                             backref=db.backref('applied', lazy='dynamic'), lazy='dynamic')
+    
+    def __repr__(self):
+        return '<Stud {} - {};>'.format(self.id, self.username)
+
+    def get_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
 class Course(db.Model):
     id = db.Column(db.Integer, primary_key=True)

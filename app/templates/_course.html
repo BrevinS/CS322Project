@@ -1,0 +1,28 @@
+<table class="coursetable" padding="2px">
+    <tr>
+        <td width="30%">{{ course.coursenum }} - {{ course.title }}</td>
+        <!--MUST CREATE GET REQUEST FOR course/<courseid>
+            THEN I MUST REDIRECT TO IT UPON PRESS
+            NEED TO ADD LOGIN (USERMIXIN) SO WE CAN SEE IF ALREADY ENROLLED
+            THEN APPLY JINJA CONDITIONAL-->
+        <td width="15%">Apply</td>
+        <td width="15%"># of TA's needed: {{ course.num_ta }}</td>
+        <td width="20%">Required Grade: {% if course.min_grade == 1 %}
+                                        {{ 'A' }}
+                                        {% endif %}
+                                        {% if course.min_grade == 2 %}
+                                        {{ 'B' }}
+                                        {% endif %}
+                                        {% if course.min_grade == 3 %}
+                                        {{ 'C' }}
+                                        {% endif %}
+                                        {% if course.min_grade == 4 %}
+                                        {{ 'D' }}
+                                        {% endif %}
+                                        {% if course.min_grade == 5 %}
+                                        {{ 'F' }}
+                                        {% endif %}
+        </td>
+        <td width="20">Min GPA: {{ course.min_grade }} </td>
+    </tr>
+</table>
