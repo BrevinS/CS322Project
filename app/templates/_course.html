@@ -5,24 +5,39 @@
             THEN I MUST REDIRECT TO IT UPON PRESS
             NEED TO ADD LOGIN (USERMIXIN) SO WE CAN SEE IF ALREADY ENROLLED
             THEN APPLY JINJA CONDITIONAL-->
-        <td width="15%">Apply</td>
-        <td width="15%"># of TA's needed: {{ course.num_ta }}</td>
-        <td width="20%">Required Grade: {% if course.min_grade == 1 %}
-                                        {{ 'A' }}
-                                        {% endif %}
-                                        {% if course.min_grade == 2 %}
-                                        {{ 'B' }}
-                                        {% endif %}
-                                        {% if course.min_grade == 3 %}
-                                        {{ 'C' }}
-                                        {% endif %}
-                                        {% if course.min_grade == 4 %}
-                                        {{ 'D' }}
-                                        {% endif %}
-                                        {% if course.min_grade == 5 %}
-                                        {{ 'F' }}
-                                        {% endif %}
-        </td>
-        <td width="20">Min GPA: {{ course.min_grade }} </td>
-    </tr>
-</table>
+            
+            <td width="15%"># of TA's needed: {{ course.num_ta }}</td>
+            <td width="15%">Required Grade: {% if course.min_grade == 1 %}
+                                            {{ 'A' }}
+                                            {% endif %}
+                                            {% if course.min_grade == 2 %}
+                                            {{ 'B' }}
+                                            {% endif %}
+                                            {% if course.min_grade == 3 %}
+                                            {{ 'C' }}
+                                            {% endif %}
+                                            {% if course.min_grade == 4 %}
+                                            {{ 'D' }}
+                                            {% endif %}
+                                            {% if course.min_grade == 5 %}
+                                            {{ 'F' }}
+                                            {% endif %}
+            </td>
+            <td width="15">Min GPA: {{ course.min_grade }} </td>
+            <td width="10">
+                {% if current_user.role == 1 %}
+                    {% if current_user.is_applied(course) == False %}
+                        <form action="{{ url_for('apply', courseid=course.id) }}" method="post">
+                            {{ form.hidden_tag() }}
+                            {{ form.submit(value='Apply', class='button') }}
+                        </form>
+                    {% else %}
+                        <form action="{{ url_for('unapply', courseid=course.id) }}" method="post">
+                            {{ form.hidden_tag() }}
+                            {{ form.submit(value='Unapply', class='button') }}
+                        </form>
+                    {% endif %}
+                {% endif %} 
+            </td>
+        </tr>
+    </table>

@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, FloatField, IntegerField, PasswordField, SelectField
+from wtforms import StringField, SubmitField, FloatField, IntegerField, PasswordField, SelectField, BooleanField
 from wtforms.validators import ValidationError, Length, DataRequired, Email, EqualTo
 from app.models import Student, Professor, Course
 
@@ -54,7 +54,15 @@ class CourseForm(FlaskForm):
     #^^^^^^^^^^^^^^^^^QUERY OF PREVIOUS COURSES TA'd
     #list of Students who applied
 
-
+class LoginForm(FlaskForm):
+    role = SelectField('Role', choices = [(1, 'Student'), (2, 'Professor')])
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    rememberme = BooleanField('Remember Me')
+    submit = SubmitField('Sign In')
+    
+class EmptyForm(FlaskForm):
+    submit = SubmitField('Submit')
 #Enter courses taught by professor, how many TA's needed per course, qualification (min GPA, grade in course, prior TA experience)
 #class ProfessorForm(FlaskForm):
     #COURSES TEACHING QUERY

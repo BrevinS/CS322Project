@@ -1,12 +1,17 @@
-from app import db
+from app import db, login
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin
+
+@login.user_loader
+def load_user(id):
+    return Student.query.get(int(id))
 
 applied = db.Table('applied',
     db.Column('studentid', db.Integer, db.ForeignKey('student.id')),
     db.Column('courseid', db.Integer, db.ForeignKey('course.id'))
 )
 
-class Professor(db.Model):
+class Professor(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
     username = db.Column(db.String(32), unique=True)
@@ -16,9 +21,11 @@ class Professor(db.Model):
     wsuid = db.Column(db.String(8), unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     phone = db.Column(db.String(10), unique=True)
+    def returnrole(self):
+        return 1
 
     def __repr__(self):
-        return '<Prof {} - {};>'.format(self.id, self.username)
+        return '<Prof {} - {};>'.format(self.firstname, self.lastname)
 
     def get_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -27,7 +34,7 @@ class Professor(db.Model):
         return check_password_hash(self.password_hash, password)
     #They must be able to enter courses they are teaching [db relationship?]
 
-class Student(db.Model):
+class Student(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
     username = db.Column(db.String(32), unique=True)
@@ -45,9 +52,22 @@ class Student(db.Model):
     pendingapps = db.relationship ('Course', secondary = applied,
                             primaryjoin=(applied.c.studentid == id),
                             backref=db.backref('applied', lazy='dynamic'), lazy='dynamic')
-    
+    def returnrole(self):
+        return 0
+
+    def apply(self, newapp):
+        if not self.has_applied(newapp):
+            self.pendingapps.append(newapp)
+
+    def is_applied(self, newapp):
+        return self.pendingapps.filter(applied.c.courseid == newapp.id).count() > 0
+
+    def unapply(self, newapp):
+        if self.is_applied(newapp):
+            self.pendingapps.remove(newapp)
+
     def __repr__(self):
-        return '<Stud {} - {};>'.format(self.id, self.username)
+        return '<Stud {} - {};>'.format(self.firstname, self.lastname)
 
     def get_password(self, password):
         self.password_hash = generate_password_hash(password)

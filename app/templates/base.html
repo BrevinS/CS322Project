@@ -7,10 +7,20 @@
 <body>
   <div class = "nav-container">
       <table>
-          <td><a href="{{ url_for('index') }}" class="button">Home</a></td>
-      </table>
-      <a href="{{ url_for('studregister') }}" class="button">Register as Student</a>
-      <a href="{{ url_for('profregister') }}" class="button">Register as Professor</a>
+        <td><a href="{{ url_for('index') }}" class="button">Home</a></td>
+        <td><a href="{{ url_for('studregister') }}" class="button">Register as Student</a></td>
+        <td><a href="{{ url_for('profregister') }}" class="button">Register as Professor</a></td>
+        {% if current_user.is_anonymous %}
+            <td><a href="{{ url_for('login') }}" class = "button"> Login </a></td>
+        {% else %}
+            <td><a href="{{ url_for('logout') }}" class = "button"> Logout </a></td>
+            <td>Logged in as {{ current_user.username }} </td>
+        {% endif %}
+        
+        <td><a href="{{ url_for('createclass') }}" class = "button"> Create Course </a></td>
+        
+        </table>
+
       {% with messages = get_flashed_messages() %}
       {% if messages %}
           {% for message in messages %}
