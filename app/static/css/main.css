@@ -7,18 +7,33 @@
     border : 1px black solid;
     width : 50%;
     position: center;
-    height : 14%;
+    height : 22%;
     font-size : 22px;
     border: 3px solid greenyellow;
     background-color: hotpink;
     border-radius: 23px;
-    padding-top : 10px;
+    padding-top : 6px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.coursetableapps{
+    text-align : center;
+    border : 1px black solid;
+    width : 50%;
+    position: center;
+    height : 12%;
+    font-size : 22px;
+    border: 3px solid greenyellow;
+    background-color: rgb(105, 255, 113);
+    border-radius: 23px;
+    padding-top : 6px;
     margin-left: auto;
     margin-right: auto;
 }
 
 .flash-container {
-    background:#c9cc27;
+    background:#0bce07;
 	font-family: Tahoma;
 	font-size: 24px;
     padding: 30px;
@@ -32,4 +47,10 @@
     text-align: center;
 }
 
-
+.pretagitem {
+    text-align: center;
+    margin: 1%;
+    padding: 2px 2px;
+    border-style: double;
+    background-color: rgb(113, 213, 238);
+}

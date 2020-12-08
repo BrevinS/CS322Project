@@ -6,4 +6,14 @@
     {% for course in courses %}
         {% include '_course.html' %}
     {% endfor %}
+    <!--RECOMMENDED STUDENT COURSES?-->
+    {% if current_user.returnrole() == 0 %}
+        <h1 class="si">{{ 'Courses Recommended For You' }}</h1>
+        {% for course in courses %}
+            <!--CHECK IF THEY HAVE THE GPA-->
+            {% if current_user.c_gpa > course.min_gpa %}
+                {% include '_course.html' %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
 {% endblock %}

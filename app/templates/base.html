@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>{{ title }}</title>
+        <title>EECS TA APP</title>
     <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
     </head>
 
@@ -14,11 +14,14 @@
             <td><a href="{{ url_for('login') }}" class = "button"> Login </a></td>
         {% else %}
             <td><a href="{{ url_for('logout') }}" class = "button"> Logout </a></td>
-            <td>Logged in as {{ current_user.username }} </td>
+            
+            {% if current_user.returnrole() == 1 %}
+            <td><a href="{{ url_for('createclass') }}" class = "button"> Create Course </a></td>
+            <td><a href="{{ url_for('viewapps') }}" class = "button">View Applications</a></td>
+            {% endif %}
         {% endif %}
-        
-        <td><a href="{{ url_for('createclass') }}" class = "button"> Create Course </a></td>
-        
+            
+            <td>Logged in as {{ current_user.username }} </td>
         </table>
 
       {% with messages = get_flashed_messages() %}
@@ -28,11 +31,7 @@
           {% endfor %}
       {% endif %}
       {% endwith %}
-
-
-
       {% block content %} {% endblock %}
   </div>
 </body>
-
 </html>

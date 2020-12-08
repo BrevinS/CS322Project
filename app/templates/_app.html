@@ -1,0 +1,31 @@
+<table class="coursetableapps" padding="2px">
+    <br>
+    <tr>
+        <td width="50%" style="text-align:center">
+            {{ app.firstname }} {{ app.lastname }}
+        </td>
+        <!--Accept TA For Professor-->
+        <td width="50" style="text-align:center">
+            <form action="{{ url_for('acceptTA', courseid=course.id, studentid=app.id) }}" method="post">
+                <br>
+                <input type="submit" value="Accept TA">
+            </form>
+        </td>
+    </tr>
+    <tr>
+        <td width="25%" style="text-align:center">
+            {{ 'Email:' }} {{ app.email }} 
+        </td>
+        <td width="25%" style="text-align:center">
+            {{ 'WSUID:' }} {{ app.wsuid }}
+        </td>
+    </tr>
+    <tr>
+        <td width="50%" style="text-align:center">
+            {{ 'GPA:' }} {{ app.c_gpa }} 
+        </td>
+        <td width="50%" style="text-align:center">
+            {{ 'Grad Date:' }} {{ app.grad_date }}
+        </td>
+    </tr>
+</table>

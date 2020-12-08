@@ -1,7 +1,9 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, FloatField, IntegerField, PasswordField, SelectField, BooleanField
 from wtforms.validators import ValidationError, Length, DataRequired, Email, EqualTo
-from app.models import Student, Professor, Course
+from app.models import Student, Professor, Course, Tag
+from wtforms.ext.sqlalchemy.fields import QuerySelectMultipleField
+from wtforms.widgets import ListWidget, CheckboxInput
 
 class ProfessorForm(FlaskForm):
     firstname = StringField('First Name', validators=[DataRequired()])
@@ -13,6 +15,7 @@ class ProfessorForm(FlaskForm):
     phone = StringField('Phone #', validators=[DataRequired(), Length(min=10, max=10)])
     password2 = PasswordField('Repeat Password', validators=[DataRequired(), 
                 EqualTo('password1')])
+    
     submit = SubmitField('Register')
 
     def validate_username(self, username):
@@ -43,12 +46,19 @@ class StudentForm(FlaskForm):
     submit = SubmitField('Register')
     #QUERY OF PREVIOUS TA JOBS
 
+def get_tag():
+    return Tag.query
+
 class CourseForm(FlaskForm):
     coursenum = StringField('Course #', [Length(min=3, max=3)])
     title = StringField('Course Title', validators=[DataRequired()])
     num_ta = IntegerField('# of TA\'s', validators=[DataRequired()])
     min_gpa = FloatField('minimum GPA', validators=[DataRequired()])
     min_grade = SelectField('Grade in course', choices = [(1, 'A'), (2, 'B'), (3, 'C'), (4,'D'), (5,'F')])
+    
+    tag = QuerySelectMultipleField('Tag', query_factory=get_tag, get_label='name',
+                                        widget=ListWidget(prefix_label=False),
+                                        option_widget=CheckboxInput())
     submit = SubmitField('Create Course')
     #priorxp = 
     #^^^^^^^^^^^^^^^^^QUERY OF PREVIOUS COURSES TA'd
@@ -60,11 +70,23 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     rememberme = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
-    
+
+#THIS WAS USELESS
 class EmptyForm(FlaskForm):
     submit = SubmitField('Submit')
 #Enter courses taught by professor, how many TA's needed per course, qualification (min GPA, grade in course, prior TA experience)
 #class ProfessorForm(FlaskForm):
     #COURSES TEACHING QUERY
+
+#YEAR/SEMESTER THEY TOOK THE COURSE
+#1 INDICATES YEAR/SEMESTER THEY ARE WANTING TO TA FOR THE COURSE
+class ApplyForm(FlaskForm):
+    semester = SelectField('Semester', choices = [(1, 'Fall'), (2, 'Spring'), (3, 'Summer')])
+    year = StringField('Year of enrollment in course', validators=[DataRequired(), Length(min=4, max=4)])
+    semester1 = SelectField('Semester you want to TA', choices = [(1, 'Fall'), (2, 'Spring'), (3, 'Summer')])
+    year1 = StringField('Year you want to TA', validators=[DataRequired(), Length(min=4, max=4)])
+    min_grade = SelectField('Grade in course', choices = [(1, 'A'), (2, 'B'), (3, 'C'), (4,'D'), (5,'F')])
+    submit = SubmitField('Send App')
+
 
     

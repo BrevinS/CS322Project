@@ -36,9 +36,12 @@
                 <span style="color: navy;">[{{ error }}]</span>
                 {% endfor %}
 
+                {{ form.tag.label }}
+                <div>
+                    {{ form.tag }}
+                </div>
+
             <p>{{ form.submit(class='button') }}</p>
         </form> 
-
     {% endif %}
-
 {% endblock %}

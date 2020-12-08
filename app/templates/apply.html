@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Student Course Application</h1>
+    {% if form %}
+        <form action="" method="POST">
+            <!---->
+            {{ form.hidden_tag() }}
+
+            <p>{{ form.semester.label }}</p>
+            <p>{{ form.semester(class='textinput') }}</p>
+          
+
+            <p>{{ form.year.label }}</p>
+            <p>{{ form.year(class='textinput') }}</p>         
+           
+
+            <p>{{ form.min_grade.label }}</p>
+            <p>{{ form.min_grade(class='textinput') }}</p>
+            <p>{{ form.semester1.label }}</p>
+            <p>{{ form.semester1(class='textinput') }}</p>
+        
+           
+
+            <p>{{ form.year1.label }}</p>
+            <p>{{ form.year1(class='textinput') }}</p>     
+            
+
+            <p>{{ form.submit(class="button") }}</p>
+        </form>
+    {% endif %}
+{% endblock %}

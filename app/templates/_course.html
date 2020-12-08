@@ -1,13 +1,15 @@
 <table class="coursetable" padding="2px">
+    <!--This looks good-->
+    <br>
     <tr>
-        <td width="30%">{{ course.coursenum }} - {{ course.title }}</td>
+        <td width="25%">{{ course.coursenum }} - {{ course.title }}</td>
         <!--MUST CREATE GET REQUEST FOR course/<courseid>
             THEN I MUST REDIRECT TO IT UPON PRESS
             NEED TO ADD LOGIN (USERMIXIN) SO WE CAN SEE IF ALREADY ENROLLED
             THEN APPLY JINJA CONDITIONAL-->
             
             <td width="15%"># of TA's needed: {{ course.num_ta }}</td>
-            <td width="15%">Required Grade: {% if course.min_grade == 1 %}
+            <td width="20%">Required Grade: {% if course.min_grade == 1 %}
                                             {{ 'A' }}
                                             {% endif %}
                                             {% if course.min_grade == 2 %}
@@ -23,21 +25,49 @@
                                             {{ 'F' }}
                                             {% endif %}
             </td>
-            <td width="15">Min GPA: {{ course.min_grade }} </td>
-            <td width="10">
-                {% if current_user.role == 1 %}
-                    {% if current_user.is_applied(course) == False %}
-                        <form action="{{ url_for('apply', courseid=course.id) }}" method="post">
-                            {{ form.hidden_tag() }}
-                            {{ form.submit(value='Apply', class='button') }}
-                        </form>
-                    {% else %}
-                        <form action="{{ url_for('unapply', courseid=course.id) }}" method="post">
-                            {{ form.hidden_tag() }}
-                            {{ form.submit(value='Unapply', class='button') }}
-                        </form>
-                    {% endif %}
-                {% endif %} 
+            <td width="15%">Min GPA: {{ course.min_gpa }} </td>
+            <td width="2%">
+            <!--Lord forgive me for this spaghetti-->
+            {% if current_user.returnrole() == 0 %}
+                {% if current_user.is_applied(course) == False %}
+                    <form action="{{ url_for('apply', courseid=course.id) }}" method="post">
+                        <input type="submit" value="Apply">
+                    </form>
+                {% else %}
+                    <form action="{{ url_for('unapply', courseid=course.id) }}" method="post">
+                        <input type="submit" value="Un-Apply">
+                    </form>
+                {% endif %}
+            {% endif %}
+            {% if current_user.returnrole() == 1 %}
+                <!--We need to let professor close their courses? -->
+                {% if current_user.username == course.writer.username %}
+                 <form action="{{ url_for('delete', courseid=course.id) }}" method="post">
+                    <input type="submit" value="Delete">
+                 </form>
+                 <!--Professors can see who has applied for their courses-->
+                 
+                 {% endif %}
+            {% endif %}
+            </td>
+        </tr>
+        <!--Professor Information-->
+        <tr width="100%" colspan="9" style="text-align:center">
+            <td width="35">Instructor: {{ course.writer.firstname }} {{ course.writer.lastname }}</td>
+            <td width="30">Email: {{ course.writer.email }}</td>
+            <td width="35">Phone: {{ course.writer.phone }}</td>
+        </tr>
+        <!--Course Qualifications-->
+        <tr>
+            <td width="15%" style = "text-align:center">
+                {{ 'TA Requirements:' }}
+            </td>
+            <td width="85%" colspan="4" padding-bottom="5" style = "text-align:left">
+                {% for raptor in course.tags.all() %}
+                    <span class="pretagitem">
+                        {{ raptor.name }}
+                    </span>
+                {% endfor %}
             </td>
         </tr>
     </table>

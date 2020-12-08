@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 class="si">Pending Teacher Assistant Applications</h1>
+    {% for course in courses %}
+        {% if current_user.username == course.writer.username %}
+            {% include '_course.html' %}
+                {% if (course.ta_apps.all() | length) > 0 %}
+                    <h1 class="si">
+                        {{ 'Applicants' }}
+                        {% for app in course.ta_apps.all() %}
+                            {% include '_app.html' %}
+                        {% endfor %}
+                    </h1>
+                {% endif %}
+        {% endif %}
+    {% endfor %}
+{% endblock %}
