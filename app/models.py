@@ -1,6 +1,7 @@
 from app import db, login
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from flask_login import current_user
 
 @login.user_loader
 def load_user(id):
@@ -92,6 +93,10 @@ class Student(UserMixin, db.Model):
         if self.is_applied(newapp):
             self.pendingapps.remove(newapp)
 
+    def unaccept(self, newapp):
+        if self.is_ta(newapp):
+            self.accepted.remove(newapp)
+
     def __repr__(self):
         return '<Stud {} - {};>'.format(self.firstname, self.lastname)
 
@@ -125,6 +130,13 @@ class Course(db.Model):
 
     def accepted(self, studentTA):
         self.accepted_tas.append(studentTA)
+
+    def check(self, studentTA):
+        return self.accepted_tas.filter(accepted.c.studentid == studentTA.id).count() > 0
+
+    def unaccept(self, studentTA):
+        if self.check(studentTA):
+            self.accepted_tas.remove(studentTA)
 
 #Requirements in the form of tags
 class Tag(db.Model):

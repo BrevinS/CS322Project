@@ -6,10 +6,17 @@
         </td>
         <!--Accept TA For Professor-->
         <td width="50" style="text-align:center">
+            {% if course.check(app) == True %}
+            <form action="{{ url_for('unacceptTA', courseid=course.id, studentid=app.id) }}" method="post">
+                <br>
+                <input type="submit" value="Remove TA">
+            </form>
+            {% else %}
             <form action="{{ url_for('acceptTA', courseid=course.id, studentid=app.id) }}" method="post">
                 <br>
                 <input type="submit" value="Accept TA">
             </form>
+            {% endif %}
         </td>
     </tr>
     <tr>

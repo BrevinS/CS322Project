@@ -1,16 +1,14 @@
 .nav-container{
-    background-color: #FF7F50;
+    background-color: 	#808080;
 }
 
 .coursetable{
     text-align : center;
-    border : 1px black solid;
     width : 50%;
     position: center;
     height : 22%;
     font-size : 22px;
-    border: 3px solid greenyellow;
-    background-color: hotpink;
+    background-color: #ff9999;
     border-radius: 23px;
     padding-top : 6px;
     margin-left: auto;
@@ -19,12 +17,10 @@
 
 .coursetableapps{
     text-align : center;
-    border : 1px black solid;
     width : 50%;
     position: center;
     height : 12%;
     font-size : 22px;
-    border: 3px solid greenyellow;
     background-color: rgb(105, 255, 113);
     border-radius: 23px;
     padding-top : 6px;
@@ -52,5 +48,12 @@
     margin: 1%;
     padding: 2px 2px;
     border-style: double;
-    background-color: rgb(113, 213, 238);
+    background-color: #ff8080;
+}
+
+.white{
+    color: white;
+    text-align: right;
+    margin: auto;
+    padding: 13px;
 }

@@ -23,6 +23,9 @@ def index():
 
 @app.route('/profregister', methods=['GET', 'POST'])
 def profregister():
+    if current_user.is_authenticated:
+        flash('You must logout to use this feature!')
+        return redirect(url_for('index'))
     form = ProfessorForm()
     if form.validate_on_submit():
         acc = Professor(username=form.username.data, email=form.email.data, firstname=form.firstname.data,
@@ -37,6 +40,9 @@ def profregister():
 
 @app.route('/studregister', methods=['GET', 'POST'])
 def studregister():
+    if current_user.is_authenticated:
+        flash('You must logout to use this feature!')
+        return redirect(url_for('index'))
     form = StudentForm()
     if form.validate_on_submit():
         acc = Student(username=form.username.data, email=form.email.data, firstname=form.firstname.data,
@@ -158,13 +164,30 @@ def acceptTA(courseid, studentid):
     if _course is not None and _student is not None:
         for course in courses:
             if _student.is_ta(course):
-                flash('Student {}{} is already a TA! Active TA for {}'.format(_student.firstname, _student.lastname, _course.title))
+                flash('Student {}{} is already a TA! Active TA for {}'.format(_student.firstname, _student.lastname, course.title))
                 flag = 1
-                return redirect(url_for('index'))
+                return redirect(url_for('viewapps'))
         if flag == 0:
             _course.accepted(_student)
             db.session.commit()
             flash('You have successfully made {}{} a TA for {}'.format(_student.firstname, _student.lastname, _course.title))
+        return redirect(url_for('viewapps'))
+    else:
+        flash('Something went wrong')
+        return redirect(url_for('index'))
+
+@app.route('/unacceptTA/<courseid>/<studentid>', methods=['POST'])
+@login_required
+def unacceptTA(courseid, studentid):
+    _course = db.session.query(Course).filter_by(id=courseid).first()
+    _student = db.session.query(Student).filter_by(id=studentid).first()
+    courses = Course.query.order_by(Course.coursenum).all()
+    if _course is not None and _student is not None:
+        if _student.is_ta(_course):
+            _course.unaccept(_student)
+            db.session.commit()
+            flash('Successfully removed {}{} from being a TA for {}'.format(_student.firstname, _student.lastname, _course.title))
+            return redirect(url_for('viewapps'))
         return redirect(url_for('index'))
     else:
         flash('Something went wrong')
