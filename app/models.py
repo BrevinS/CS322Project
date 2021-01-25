@@ -5,8 +5,8 @@ from flask_login import current_user
 
 @login.user_loader
 def load_user(id):
-    return Professor.query.get(int(id))
-    #return Student.query.get(int(id))
+    #return Professor.query.get(int(id))
+    return Student.query.get(int(id))
 
 #Relationships
 courseTags = db.Table('courseTags',
